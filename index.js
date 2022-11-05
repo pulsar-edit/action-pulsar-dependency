@@ -43,7 +43,8 @@ const fs = require("fs");
     shell.exec("yarn build");
 
     // Then to test
-    shell.exec("yarn start --test spec");
+    //shell.exec("yarn start --test spec");
+    // Don't test, we will let the parent runner do that.
 
     // Then we will let the exit code be inherited from the test command, or any commands above if something is very wrong.
 
