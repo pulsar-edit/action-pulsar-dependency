@@ -34,7 +34,7 @@ const fs = require("fs");
     fs.writeFileSync("./pulsar/package.json", JSON.stringify(packJSON, null, 2));
 
     // Now to move into the pulsar directory
-    shell.exec("cd pulsar");
+    shell.cd("pulsar");
 
     // And to install
     shell.exec("yarn install");
