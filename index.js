@@ -15,20 +15,31 @@ const fs = require("fs");
       core.setFailed('No Package has been specified to test!');
     }
 
-    
+
     console.log(`Package to test: ${pack}`);
     console.log(`Current Dir: ${__dirname}`);
     console.log("Our Current Files:");
     console.log(fs.readdirSync("./", { withFileTypes: true }));
 
     console.log("Now lets try to copy our files:");
-    await copyDir("./", "./package");
+    await copyDir("./", "./package-tobe-random");
 
     console.log("Now lets try to clone our Pulsar Repo");
     shell.exec("git clone https://github.com/pulsar-edit/pulsar");
 
     console.log("Now our current files:");
     console.log(fs.readdirSync("./", { withFileTypes: true }));
+
+    console.log("Now lets modify the package.json");
+
+    let packJSON = require("./pulsar/package.json");
+    packJSON.dependencies[pack] = `./package-tobe-random/${pack}`;
+
+    fs.writeFileSync("./pulsar/package.json", JSON.stringify(packJSON, null, 2));
+
+    console.log("Now lets run some tests and stuff.");
+
+    shell.exec("yarn install");
 
     // First lets move the current repo's code into a subfolder
     //await copyDir("./", "./package");
