@@ -39,7 +39,7 @@ const fs = require("fs");
     console.log(`Package to test: ${pack}`);
     console.log(`Current Dir: ${__dirname}`);
     console.log("Our Current Files:");
-    console.log(fs.readdirSync(src, { withFileTypes: true }));
+    console.log(fs.readdirSync("./", { withFileTypes: true }));
 
   } catch(err) {
     core.setFailed(err.message);
