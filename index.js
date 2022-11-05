@@ -29,7 +29,7 @@ const fs = require("fs");
     // Now time to modify Pulsars package.json
     let packJSON = fs.readFileSync("./pulsar/package.json");
     packJSON = JSON.parse(packJSON);
-    packJSON.dependencies[pack] = `./package-${unique}`;
+    packJSON.dependencies[pack] = `../package-${unique}`;
 
     fs.writeFileSync("./pulsar/package.json", JSON.stringify(packJSON, null, 2));
 
