@@ -1,0 +1,10 @@
+name: 'Action Pulsar Dependency Tester'
+description: 'Test Dependency Updates against the Pulsar Editor'
+inputs:
+  package-to-test:
+    description: 'The package we are testing'
+    require: true
+    default: ''
+runs:
+  using: 'node16'
+  main: 'index.js'
