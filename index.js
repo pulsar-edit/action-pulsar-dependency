@@ -9,10 +9,10 @@ const fs = require("fs");
   try {
 
     // First lets move the current repo's code into a subfolder
-    await copyDir("./", "./package");
+    //await copyDir("./", "./package");
 
     // Then we need to clone the current Pulsar Repo
-    shell.exec("git clone https://github.com/pulsar-edit/pulsar");
+    //shell.exec("git clone https://github.com/pulsar-edit/pulsar");
 
     // Now we need the package we are testing.
     const pack = core.getInput('package-to-test');
@@ -24,17 +24,22 @@ const fs = require("fs");
     // Now with the package we know we are testing, lets update the `package.json`
     // to point to the local copy of this package.
 
-    let packJSON = require("./pulsar/package.json");
-    packJSON.dependencies[pack] = `./${pack}`;
+    //let packJSON = require("./pulsar/package.json");
+    //packJSON.dependencies[pack] = `./${pack}`;
 
     // Now with the package.json poiting to our local dependencies, we will save the file
-    fs.writeFileSync("./pulsar/package.json", JSON.stringify(packJSON, null, 2));
+    //fs.writeFileSync("./pulsar/package.json", JSON.stringify(packJSON, null, 2));
 
     // Then lets run our commands to install, build, and run test
-    shell.exec("yarn install");
-    shell.exec("yarn build");
-    shell.exec("yarn start --test spec");
+    //shell.exec("yarn install");
+    //shell.exec("yarn build");
+    //shell.exec("yarn start --test spec");
 
+
+    console.log(`Package to test: ${pack}`);
+    console.log(`Current Dir: ${__dirname}`);
+    console.log("Our Current Files:");
+    console.log(fs.readdirSync(src, { withFileTypes: true }));
 
   } catch(err) {
     core.setFailed(err.message);
