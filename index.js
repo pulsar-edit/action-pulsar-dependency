@@ -34,14 +34,22 @@ const fs = require("fs");
     console.log(fs.readdirSync("./pulsar/", { withFileTypes: true }));
     console.log("Now lets modify the package.json");
 
+    let packJSON = fs.readFileSync("./pulsar/package.json");
+    packJSON = JSON.parse(packJSON);
+    packJSON.dependencies[pack] = `./package-tobe-random/${pack}`;
+
+    fs.writeFileSync("./pulsar/package.json", JSON.stringify(packJSON, null, 2));
     //let packJSON = require("./pulsar/package.json");
     //packJSON.dependencies[pack] = `./package-tobe-random/${pack}`;
 
     //fs.writeFileSync("./pulsar/package.json", JSON.stringify(packJSON, null, 2));
 
+    console.log("Move down a dir");
+    shell.exec("cd pulsar");
+
     console.log("Now lets run some tests and stuff.");
 
-    //shell.exec("yarn install");
+    shell.exec("yarn install");
 
     // First lets move the current repo's code into a subfolder
     //await copyDir("./", "./package");
