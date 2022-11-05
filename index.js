@@ -8,18 +8,34 @@ const fs = require("fs");
 (async () => {
   try {
 
-    // First lets move the current repo's code into a subfolder
-    //await copyDir("./", "./package");
-
-    // Then we need to clone the current Pulsar Repo
-    //shell.exec("git clone https://github.com/pulsar-edit/pulsar");
-
     // Now we need the package we are testing.
     const pack = core.getInput('package-to-test');
 
     if (pack === '') {
       core.setFailed('No Package has been specified to test!');
     }
+
+    
+    console.log(`Package to test: ${pack}`);
+    console.log(`Current Dir: ${__dirname}`);
+    console.log("Our Current Files:");
+    console.log(fs.readdirSync("./", { withFileTypes: true }));
+
+    console.log("Now lets try to copy our files:");
+    await copyDir("./", "./package");
+
+    console.log("Now lets try to clone our Pulsar Repo");
+    shell.exec("git clone https://github.com/pulsar-edit/pulsar");
+
+    console.log("Now our current files:");
+    console.log(fs.readdirSync("./", { withFileTypes: true }));
+
+    // First lets move the current repo's code into a subfolder
+    //await copyDir("./", "./package");
+
+    // Then we need to clone the current Pulsar Repo
+    //shell.exec("git clone https://github.com/pulsar-edit/pulsar");
+
 
     // Now with the package we know we are testing, lets update the `package.json`
     // to point to the local copy of this package.
@@ -35,12 +51,6 @@ const fs = require("fs");
     //shell.exec("yarn build");
     //shell.exec("yarn start --test spec");
 
-
-    console.log(`Package to test: ${pack}`);
-    console.log(`Current Dir: ${__dirname}`);
-    console.log("Our Current Files:");
-    console.log(fs.readdirSync("./", { withFileTypes: true }));
-
   } catch(err) {
     core.setFailed(err.message);
   }
@@ -52,8 +62,9 @@ const fs = require("fs");
   * @see {@link https://stackoverflow.com/a/64255382/12707685}
   */
 async function copyDir(src, dest) {
-  fs.mkdirSync(dest, { recursive: true });
+  // Read our file list first, then create it's location, to avoid a loop.
   let entries = fs.readdirSync(src, { withFileTypes: true });
+  fs.mkdirSync(dest, { recursive: true });
 
   for (let entry of entries) {
     let srcPath = path.join(src, entry.name);
