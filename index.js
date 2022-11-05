@@ -9,9 +9,7 @@ const fs = require("fs");
   try {
 
     // First lets move the current repo's code into a subfolder
-
     await copyDir("./", "./package");
-
 
     // Then we need to clone the current Pulsar Repo
     shell.exec("git clone https://github.com/pulsar-edit/pulsar");
@@ -49,8 +47,8 @@ const fs = require("fs");
   * @see {@link https://stackoverflow.com/a/64255382/12707685}
   */
 async function copyDir(src, dest) {
-  await fs.mkdir(dest, { recursive: true });
-  let entries = await fs.readdir(src, { withFileTypes: true });
+  fs.mkdirSync(dest, { recursive: true });
+  let entries = fs.readdirSync(src, { withFileTypes: true });
 
   for (let entry of entries) {
     let srcPath = path.join(src, entry.name);
@@ -58,6 +56,6 @@ async function copyDir(src, dest) {
 
     entry.isDirectory() ?
       await copyDir(srcPath, destPath) :
-      await fs.copyFile(srcPath, destPath);
+      fs.copyFileSync(srcPath, destPath);
   }
 }
