@@ -4,41 +4,45 @@ const shell = require("shelljs");
 const path = require("path");
 const fs = require("fs");
 
-try {
 
-  // First lets move the current repo's code into a subfolder
+(async () => {
+  try {
 
-  await copyDir("./", "./package");
+    // First lets move the current repo's code into a subfolder
+
+    await copyDir("./", "./package");
 
 
-  // Then we need to clone the current Pulsar Repo
-  shell.exec("git clone https://github.com/pulsar-edit/pulsar");
+    // Then we need to clone the current Pulsar Repo
+    shell.exec("git clone https://github.com/pulsar-edit/pulsar");
 
-  // Now we need the package we are testing.
-  const pack = core.getInput('package-to-test');
+    // Now we need the package we are testing.
+    const pack = core.getInput('package-to-test');
 
-  if (pack === '') {
-    core.setFailed('No Package has been specified to test!');
+    if (pack === '') {
+      core.setFailed('No Package has been specified to test!');
+    }
+
+    // Now with the package we know we are testing, lets update the `package.json`
+    // to point to the local copy of this package.
+
+    let packJSON = require("./pulsar/package.json");
+    packJSON.dependencies[pack] = `./${pack}`;
+
+    // Now with the package.json poiting to our local dependencies, we will save the file
+    fs.writeFileSync("./pulsar/package.json", JSON.stringify(packJSON, null, 2));
+
+    // Then lets run our commands to install, build, and run test
+    shell.exec("yarn install");
+    shell.exec("yarn build");
+    shell.exec("yarn start --test spec");
+
+
+  } catch(err) {
+    core.setFailed(err.message);
   }
+})();
 
-  // Now with the package we know we are testing, lets update the `package.json`
-  // to point to the local copy of this package.
-
-  let packJSON = require("./pulsar/package.json");
-  packJSON.dependencies[pack] = `./${pack}`;
-
-  // Now with the package.json poiting to our local dependencies, we will save the file
-  fs.writeFileSync("./pulsar/package.json", JSON.stringify(packJSON, null, 2));
-
-  // Then lets run our commands to install, build, and run test
-  shell.exec("yarn install");
-  shell.exec("yarn build");
-  shell.exec("yarn start --test spec");
-
-
-} catch(err) {
-  core.setFailed(err.message);
-}
 
 /**
   * Thanks @KyleMit
