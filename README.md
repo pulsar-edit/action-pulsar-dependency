@@ -14,19 +14,20 @@ jobs:
       matrix:
         os: [ubuntu-20.04, macos-latest, windows-2019]
       fail-fast: false
-      runs-on: ${{ matrix.os }}
-      steps:
-        - name: Checkout the Latest Package Code
-          uses: actions/checkout@v3
-        - name: Setup Pulsar Editor
-          uses: pulsar-edit/action-pulsar-dependency@v2
-          with:
-            package-to-test: "snippets"
-        - name: Run the headless Pulsar Tests
-          uses: GabrielBB/xvfb-action@v1
-          with:
-            run: yarn start --test spec
-            working-directory: ./pulsar
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout the Latest Package Code
+        uses: actions/checkout@v3
+      - name: Setup Pulsar Editor
+        uses: pulsar-edit/action-pulsar-dependency@v2
+        with:
+          package-to-test: "snippets"
+      - name: Run the headless Pulsar Tests
+        uses: GabrielBB/xvfb-action@v1
+        with:
+          run: yarn start --test spec
+          working-directory: ./pulsar
+
 ```
 
 The above is a valid workflow for the `pulsar-edit/snippets` repository.
