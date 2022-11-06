@@ -1,5 +1,5 @@
 name: 'Action Pulsar Dependency Tester'
-description: 'Test Dependency Updates against the Pulsar Editor'
+description: 'Test changes in Core Dependencies of Pulsar'
 inputs:
   package-to-test:
     description: 'The package we are testing'

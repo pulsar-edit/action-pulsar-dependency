@@ -1,5 +1,4 @@
 const core = require("@actions/core");
-const github = require("@actions/github");
 const shell = require("shelljs");
 const path = require("path");
 const fs = require("fs");
@@ -37,16 +36,16 @@ const fs = require("fs");
     shell.cd("pulsar");
 
     // And to install
-    shell.exec("yarn install");
+    if (shell.exec("yarn install").code !== 0) {
+      console.log("Yarn installation Failed!");
+      shell.exit(1);
+    }
 
     // Then to build
-    shell.exec("yarn build");
-
-    // Then to test
-    //shell.exec("yarn start --test spec");
-    // Don't test, we will let the parent runner do that.
-
-    // Then we will let the exit code be inherited from the test command, or any commands above if something is very wrong.
+    if (shell.exec("yarn build").code !== 0) {
+      console.log("Yarn Build Failed!");
+      shell.exit(1);
+    }
 
   } catch(err) {
     core.setFailed(err.message);
