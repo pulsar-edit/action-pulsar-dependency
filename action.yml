@@ -1,5 +1,6 @@
 name: 'Action Pulsar Dependency Tester'
 description: 'Test changes in Core Dependencies of Pulsar'
+author: confused-Techie
 inputs:
   package-to-test:
     description: 'The package we are testing'
@@ -8,3 +9,6 @@ inputs:
 runs:
   using: 'node16'
   main: 'index.js'
+branding:
+  icon: check-square
+  color: purple
