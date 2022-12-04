@@ -36,11 +36,13 @@ const fs = require("fs");
     console.log("Modified Package.json");
     console.log(`dependencies: ${packJSON.dependencies[pack]}`);
     console.log(`packageDependencies: ${packJSON.packageDependencies[pack]}`);
-    console.log("Contents of Folder: ");
-    console.log(fs.readdirSync(`../package-${unique}`));
+
     // Now to move into the pulsar directory
     await shell.cd("pulsar");
 
+    console.log("Contents of Folder: ");
+    console.log(fs.readdirSync(`../package-${unique}`));
+    
     // And to install
     const install = await shell.exec("yarn install");
     if (install.code !== 0) {
