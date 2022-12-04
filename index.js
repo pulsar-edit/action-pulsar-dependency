@@ -23,7 +23,7 @@ const fs = require("fs");
     await copyDir("./", `./package-${unique}`);
 
     // Now we want to copy the Pulsar Repo locally
-    shell.exec("git clone https://github.com/pulsar-edit/pulsar");
+    await shell.exec("git clone https://github.com/pulsar-edit/pulsar");
 
     // Now time to modify Pulsars package.json
     let packJSON = fs.readFileSync("./pulsar/package.json");
@@ -35,22 +35,25 @@ const fs = require("fs");
     console.log("Modified Package.json");
     console.log(packJSON);
     // Now to move into the pulsar directory
-    shell.cd("pulsar");
+    await shell.cd("pulsar");
 
     // And to install
-    if (shell.exec("yarn install").code !== 0) {
+    const install = await shell.exec("yarn install");
+    if (install.code !== 0) {
       console.log("Yarn installation Failed!");
       shell.exit(1);
     }
 
     // Then to build
-    if (shell.exec("yarn build").code !== 0) {
+    const build = await shell.exec("yarn build");
+    if (build.code !== 0) {
       console.log("Yarn Build Failed!");
       shell.exit(1);
     }
 
     // Now to build with APM (rebuild)
-    if (shell.exec("yarn build:apm").code !== 0) {
+    const buildAPM = await shell.exec("yarn build:apm");
+    if (buildAPM.code !== 0) {
       console.log("Yarn APM Build Failed!");
       shell.exit(1);
     }
