@@ -28,12 +28,16 @@ const fs = require("fs");
     // Now time to modify Pulsars package.json
     let packJSON = fs.readFileSync("./pulsar/package.json");
     packJSON = JSON.parse(packJSON);
-    packJSON.dependencies[pack] = `../package-${unique}`;
+    packJSON.dependencies[pack] = `file:../package-${unique}`;
+    packJSON.packageDependencies[pack] = `file:../package-${unique}`;
 
     fs.writeFileSync("./pulsar/package.json", JSON.stringify(packJSON, null, 2));
 
     console.log("Modified Package.json");
-    console.log(packJSON);
+    console.log(`dependencies: ${packJSON.dependencies[pack]}`);
+    console.log(`packageDependencies: ${packJSON.packageDependencies[pack]}`);
+    console.log("Contents of Folder: ");
+    console.log(fs.readdirSync(`../package-${unique}`));
     // Now to move into the pulsar directory
     await shell.cd("pulsar");
 
