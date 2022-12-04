@@ -47,6 +47,12 @@ const fs = require("fs");
       shell.exit(1);
     }
 
+    // Now to build with APM (rebuild)
+    if (shell.exec("yarn build:apm").code !== 0) {
+      console.log("Yarn APM Build Failed!");
+      shell.exit(1);
+    }
+
   } catch(err) {
     core.setFailed(err.message);
   }
