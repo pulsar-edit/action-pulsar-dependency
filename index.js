@@ -32,6 +32,8 @@ const fs = require("fs");
 
     fs.writeFileSync("./pulsar/package.json", JSON.stringify(packJSON, null, 2));
 
+    console.log("Modified Package.json");
+    console.log(packJSON);
     // Now to move into the pulsar directory
     shell.cd("pulsar");
 
