@@ -42,7 +42,7 @@ const fs = require("fs");
     // Now to move into the pulsar directory
     await shell.cd("pulsar");
 
-    const migratePack = await shell.exec(`yarn add file:../package-${unique}`);
+    const migratePack = await shell.exec(`npx yarn add file:../package-${unique}`);
 
     if (migratePack.code !== 0) {
       console.log("Pack Migration Failed!");
@@ -54,28 +54,40 @@ const fs = require("fs");
     console.log(fs.readdirSync(`../package-${unique}`));
 
     // And to install
-    const install = await shell.exec("yarn install");
+    const install = await shell.exec("npx yarn install");
     if (install.code !== 0) {
       console.log("Yarn installation Failed!");
       shell.exit(1);
     }
 
     // Then to build
-    const build = await shell.exec("yarn build");
+    const build = await shell.exec("npx yarn build");
     if (build.code !== 0) {
       console.log("Yarn Build Failed!");
       shell.exit(1);
     }
 
     // Now to build with APM (rebuild)
-    const buildAPM = await shell.exec("yarn build:apm");
+    const buildAPM = await shell.exec("npx yarn build:apm");
     if (buildAPM.code !== 0) {
       console.log("Yarn APM Build Failed!");
       shell.exit(1);
     }
 
-    console.log("What's actually in our deps?");
-    console.log(fs.readdirSync("./node_modules"));
+    const installAgain = await shell.exect("npx yarn install --ignore-engines");
+    if (installAgain.code !== 0) {
+      console.log("Yarn Install Again failed!");
+      shell.exit(1);
+    }
+
+    const buildAgain = await shell.exect("npx yarn build");
+    if (buildAgain.code !== 0) {
+      console.log("Yarn Build Again Faile!");
+      shell.exit(1);
+    }
+    
+    console.log("Do we have our test runner in our deps?");
+    console.log(fs.readdirSync("./node_modules").includes("atom-jasmine3-test-runner"));
 
   } catch(err) {
     core.setFailed(err.message);
