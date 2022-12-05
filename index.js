@@ -36,7 +36,6 @@ const fs = require("fs");
     fs.writeFileSync("./pulsar/package.json", JSON.stringify(packJSON, null, 2));
 
     console.log("Modified Package.json");
-    //console.log(`dependencies: ${packJSON.dependencies[pack]}`);
     console.log(`packageDependencies: ${packJSON.packageDependencies[pack]}`);
 
     // Now to move into the pulsar directory
@@ -67,13 +66,6 @@ const fs = require("fs");
       shell.exit(1);
     }
 
-    // Now to build with APM (rebuild)
-    const buildAPM = await shell.exec("npx yarn build:apm");
-    if (buildAPM.code !== 0) {
-      console.log("Yarn APM Build Failed!");
-      shell.exit(1);
-    }
-
     const installAgain = await shell.exec("npx yarn install --ignore-engines --check-files");
     if (installAgain.code !== 0) {
       console.log("Yarn Install Again failed!");
@@ -87,8 +79,10 @@ const fs = require("fs");
     const checker = await shell.exec("npx yarn check");
     if (checker.code !== 0) {
       console.log("Yarn check failed!");
-      shell.exit(1);
     }
+
+    const list = await shell.exec("npx yarn list --pattern autocomplete-plus");
+    
 
   } catch(err) {
     core.setFailed(err.message);
