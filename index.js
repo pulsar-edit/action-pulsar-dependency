@@ -82,7 +82,21 @@ const fs = require("fs");
     }
 
     const list = await shell.exec("npx yarn list --pattern autocomplete-plus");
-    
+
+    // well. If there is some weird context nonsense, maybe lets just install our deps within the package
+    await shell.cd(`../package-${unique}`);
+
+    const installPack = await shell.exec("npm install");
+    if (installPack.code !== 0) {
+      console.log("Installing the Package Failed!");
+      shell.exit(1);
+    }
+
+    const buildPack = await shell.exec("npm build");
+    if (buildPack.code !== 0) {
+      console.log("Building the Package Failed!");
+      shell.exit(1);
+    }
 
   } catch(err) {
     core.setFailed(err.message);
