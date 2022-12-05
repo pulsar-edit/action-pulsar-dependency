@@ -74,6 +74,9 @@ const fs = require("fs");
       shell.exit(1);
     }
 
+    console.log("What's actually in our deps?");
+    console.log(fs.readdirSync("./node_modules"));
+
   } catch(err) {
     core.setFailed(err.message);
   }
