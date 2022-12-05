@@ -27,9 +27,11 @@ const fs = require("fs");
 
     // Now time to modify Pulsars package.json
     let packJSON = fs.readFileSync("./pulsar/package.json");
-    packJSON = JSON.parse(packJSON);
-    packJSON.dependencies[pack] = `file:../package-${unique}`;
+    //packJSON = JSON.parse(packJSON);
+    //packJSON.dependencies[pack] = `file:../package-${unique}`;
     packJSON.packageDependencies[pack] = `file:../package-${unique}`;
+
+    // What if this error is because the effects are reverted after the fact? As in our lock file is out of date.
 
     fs.writeFileSync("./pulsar/package.json", JSON.stringify(packJSON, null, 2));
 
@@ -40,9 +42,17 @@ const fs = require("fs");
     // Now to move into the pulsar directory
     await shell.cd("pulsar");
 
+    const migratePack = await shell.exec(`yarn add file:../package-${unique}`);
+
+    if (migratePack.code !== 0) {
+      console.log("Pack Migration Failed!");
+      console.log(migratePack);
+      shell.exit(1);
+    }
+
     console.log("Contents of Folder: ");
     console.log(fs.readdirSync(`../package-${unique}`));
-    
+
     // And to install
     const install = await shell.exec("yarn install");
     if (install.code !== 0) {
