@@ -74,20 +74,21 @@ const fs = require("fs");
       shell.exit(1);
     }
 
-    const installAgain = await shell.exec("npx yarn install --ignore-engines");
+    const installAgain = await shell.exec("npx yarn install --ignore-engines --check-files");
     if (installAgain.code !== 0) {
       console.log("Yarn Install Again failed!");
       shell.exit(1);
     }
 
-    const buildAgain = await shell.exec("npx yarn build");
-    if (buildAgain.code !== 0) {
-      console.log("Yarn Build Again Faile!");
+    let haveTest = fs.readdirSync("./node_modules").includes("atom-jasmine3-test-runner");
+
+    console.log(`Do we have our test runner in our deps? ${haveTest}`);
+
+    const checker = await shell.exec("npx yarn check");
+    if (checker.code !== 0) {
+      console.log("Yarn check failed!");
       shell.exit(1);
     }
-
-    console.log("Do we have our test runner in our deps?");
-    console.log(fs.readdirSync("./node_modules").includes("atom-jasmine3-test-runner"));
 
   } catch(err) {
     core.setFailed(err.message);
