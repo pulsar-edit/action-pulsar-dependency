@@ -34,12 +34,12 @@ const fs = require("fs");
     // Now to move into the Pulsar Directory
     await shell.cd("pulsar");
 
-    // Now to install
-    const install = await shell.exec("yarn install");
+    // Maybe we have to first try removing the old package.
+    const removeOld = await shell.exec(`yarn remove ${pack}`);
 
-    if (install.code !== 0) {
-      console.log("Yarn installation failed!");
-      core.setFailed(install);
+    if (removeOld.code !== 0) {
+      console.log("Failed to remove old version!");
+      core.setFailed(removeOld);
     }
 
     // Now to add the package via yarn
@@ -48,6 +48,14 @@ const fs = require("fs");
     if (migratePack.code !== 0) {
       console.log("Pack Migration Failed!");
       core.setFailed(migratePack);
+    }
+
+    // Now to install
+    const install = await shell.exec("yarn install --production=false");
+
+    if (install.code !== 0) {
+      console.log("Yarn installation failed!");
+      core.setFailed(install);
     }
 
     // Now to build
