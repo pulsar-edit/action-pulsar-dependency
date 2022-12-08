@@ -5,7 +5,7 @@ const fs = require("fs");
 
 (async () => {
   try {
-    
+
     const pack = core.getInput("package-to-test");
 
     if (pack === '' || pack == undefined) {
@@ -27,7 +27,7 @@ const fs = require("fs");
     let packJson = fs.readFileSync("./pulsar/package.json");
     packJson = JSON.parse(packJson);
     packJson.packageDependencies[pack] = `file:./packages/${pack}`;
-    fs.writeFileSync("./pulsar/package.json", JSON.stringify(packJSON, null, 2));
+    fs.writeFileSync("./pulsar/package.json", JSON.stringify(packJson, null, 2));
 
     console.log("Modified Package.json");
 
