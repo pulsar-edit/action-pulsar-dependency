@@ -34,20 +34,20 @@ const fs = require("fs");
     // Now to move into the Pulsar Directory
     await shell.cd("pulsar");
 
-    // Now to add the package via yarn
-    const migratePack = await shell.exec(`yarn add file:./packages/${pack}`);
-
-    if (migratePack.code !== 0) {
-      console.log("Pack Migration Failed!");
-      core.setFailed(migratePack);
-    }
-
     // Now to install
     const install = await shell.exec("yarn install");
 
     if (install.code !== 0) {
       console.log("Yarn installation failed!");
       core.setFailed(install);
+    }
+
+    // Now to add the package via yarn
+    const migratePack = await shell.exec(`yarn add file:./packages/${pack}`);
+
+    if (migratePack.code !== 0) {
+      console.log("Pack Migration Failed!");
+      core.setFailed(migratePack);
     }
 
     // Now to build
@@ -82,6 +82,8 @@ async function copyDir(src, dest) {
   for (let entry of entries) {
     let srcPath = path.join(src, entry.name);
     let destPath = path.join(dest, entry.name);
+
+    console.log(`Coping: ${srcPath} to ${destPath}`);
 
     entry.isDirectory() ?
       await copyDir(srcPath, destPath) :
