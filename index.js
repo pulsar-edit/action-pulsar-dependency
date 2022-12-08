@@ -35,7 +35,8 @@ const fs = require("fs");
     await shell.cd("pulsar");
 
     // Maybe we have to first try removing the old package.
-    const removeOld = await shell.exec(`yarn remove ${pack}`);
+    //const removeOld = await shell.exec(`yarn remove ${pack}`);
+    const removeOld = await shell.exec(`npm uninstall ${pack}`);
 
     if (removeOld.code !== 0) {
       console.log("Failed to remove old version!");
@@ -43,7 +44,8 @@ const fs = require("fs");
     }
 
     // Now to add the package via yarn
-    const migratePack = await shell.exec(`yarn add file:packages/${pack}`);
+    //const migratePack = await shell.exec(`yarn add file:packages/${pack}`);
+    const migratePack = await shell.exec(`npm install ./packages/${pack}`);
 
     if (migratePack.code !== 0) {
       console.log("Pack Migration Failed!");
@@ -51,7 +53,8 @@ const fs = require("fs");
     }
 
     // Now to install
-    const install = await shell.exec("yarn install");
+    //const install = await shell.exec("yarn install");
+    const install = await shell.exec("npm install");
 
     if (install.code !== 0) {
       console.log("Yarn installation failed!");
@@ -59,14 +62,16 @@ const fs = require("fs");
     }
 
     // Now to build
-    const build = await shell.exec("yarn build");
+    //const build = await shell.exec("yarn build");
+    const build = await shell.exec("npm build");
 
     if (build.code !== 0) {
       console.log("Yarn Build Failed!");
       core.setFailed(build);
     }
 
-    const buildApm = await shell.exec("yarn build:apm");
+    //const buildApm = await shell.exec("yarn build:apm");
+    const buildApm = await shell.exec("npm run build:apm");
 
     if (build.code !== 0) {
       console.log("Yarn Build APM Failed!");
@@ -76,7 +81,8 @@ const fs = require("fs");
     // Now to give some debug info
 
     console.log("Do our Package Deps look good?");
-    const list = await shell.exec(`yarn list`);
+    //const list = await shell.exec(`yarn list`);
+    const list = await shell.exec("npm ls");
 
 
   } catch(err) {
