@@ -3,103 +3,66 @@ const shell = require("shelljs");
 const path = require("path");
 const fs = require("fs");
 
-
 (async () => {
   try {
-
-    // Now we need the package we are testing.
-    const pack = core.getInput('package-to-test');
-    const unique = Date.now();
-
-    if (pack === '') {
-      core.setFailed('No Package has been specified to test!');
+    if (pack === '' || pack == undefined) {
+      core.setFailed("No Package has been specified to test!");
     }
 
     console.log(`Package to test: ${pack}`);
-    console.log(`Unique Number Used: ${unique}`);
 
-    // Now we need to copy the repo files into a subfolder,
-    // using a unique name, to ensure the folder we use doesn't already exist.
-    await copyDir("./", `./package-${unique}`);
+    // First we will copy our current package into a subfolder by it's name
+    await copyDir("./", `./${pack}`);
 
-    // Now we want to copy the Pulsar Repo locally
+    // then lets get the most up to date Pulsar Master
     await shell.exec("git clone https://github.com/pulsar-edit/pulsar");
 
+    // Now lets move our subfoldered package into the bundled Pulsar Packages
+    await copyDir(`./${pack}`, `./pulsar/packages/${pack}`);
+
     // Now time to modify Pulsars package.json
-    let packJSON = fs.readFileSync("./pulsar/package.json");
-    packJSON = JSON.parse(packJSON);
-    //packJSON.dependencies[pack] = `file:../package-${unique}`;
-    packJSON.packageDependencies[pack] = `file:../package-${unique}`;
-
-    // What if this error is because the effects are reverted after the fact? As in our lock file is out of date.
-
+    let packJson = fs.readFileSync("./pulsar/package.json");
+    packJson = JSON.parse(packJson);
+    packJson.packageDependencies[pack] = `file:./packages/${pack}`;
     fs.writeFileSync("./pulsar/package.json", JSON.stringify(packJSON, null, 2));
 
     console.log("Modified Package.json");
-    console.log(`packageDependencies: ${packJSON.packageDependencies[pack]}`);
 
-    // Now to move into the pulsar directory
+    // Now to move into the Pulsar Directory
     await shell.cd("pulsar");
 
-    const migratePack = await shell.exec(`npx yarn add file:../package-${unique}`);
+    // Now to add the package via yarn
+    const migratePack = await shell.exec(`yarn add file:./packages/${pack}`);
 
     if (migratePack.code !== 0) {
       console.log("Pack Migration Failed!");
-      console.log(migratePack);
-      shell.exit(1);
+      core.setFailed(migratePack);
     }
 
-    console.log("Contents of Folder: ");
-    console.log(fs.readdirSync(`../package-${unique}`));
+    // Now to install
+    const install = await shell.exec("yarn install");
 
-    // And to install
-    const install = await shell.exec("npx yarn install");
     if (install.code !== 0) {
-      console.log("Yarn installation Failed!");
-      shell.exit(1);
+      console.log("Yarn installation failed!");
+      core.setFailed(install);
     }
 
-    // Then to build
-    const build = await shell.exec("npx yarn build");
+    // Now to build
+    const build = await shell.exec("yarn build");
+
     if (build.code !== 0) {
       console.log("Yarn Build Failed!");
-      shell.exit(1);
+      core.setFailed(build);
     }
 
-    const installAgain = await shell.exec("npx yarn install --ignore-engines --check-files");
-    if (installAgain.code !== 0) {
-      console.log("Yarn Install Again failed!");
-      shell.exit(1);
-    }
+    // Now to give some debug info
 
-    let haveTest = fs.readdirSync("./node_modules").includes("atom-jasmine3-test-runner");
+    console.log("Do our Package Deps look good?");
+    const list = await shell.exec(`yarn list --pattern ${pack}`);
 
-    console.log(`Do we have our test runner in our deps? ${haveTest}`);
-
-    const checker = await shell.exec("npx yarn check");
-    if (checker.code !== 0) {
-      console.log("Yarn check failed!");
-    }
-
-    const list = await shell.exec("npx yarn list --pattern autocomplete-plus");
-
-    // well. If there is some weird context nonsense, maybe lets just install our deps within the package
-    await shell.cd(`../package-${unique}`);
-
-    const installPack = await shell.exec("npm install");
-    if (installPack.code !== 0) {
-      console.log("Installing the Package Failed!");
-      shell.exit(1);
-    }
-
-    const buildPack = await shell.exec("npm build");
-    if (buildPack.code !== 0) {
-      console.log("Building the Package Failed!");
-      shell.exit(1);
-    }
 
   } catch(err) {
-    core.setFailed(err.message);
+    core.setFailed(err);
   }
 })();
 
