@@ -43,7 +43,7 @@ const fs = require("fs");
     }
 
     // Now to add the package via yarn
-    const migratePack = await shell.exec(`yarn add file:./packages/${pack}`);
+    const migratePack = await shell.exec(`yarn add file:packages/${pack}`);
 
     if (migratePack.code !== 0) {
       console.log("Pack Migration Failed!");
