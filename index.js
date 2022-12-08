@@ -66,10 +66,17 @@ const fs = require("fs");
       core.setFailed(build);
     }
 
+    const buildApm = await shell.exec("yarn build:apm");
+
+    if (build.code !== 0) {
+      console.log("Yarn Build APM Failed!");
+      core.setFailed(build);
+    }
+
     // Now to give some debug info
 
     console.log("Do our Package Deps look good?");
-    const list = await shell.exec(`yarn list --pattern ${pack}`);
+    const list = await shell.exec(`yarn list`);
 
 
   } catch(err) {
