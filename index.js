@@ -51,7 +51,7 @@ const fs = require("fs");
     }
 
     // Now to install
-    const install = await shell.exec("yarn install --production=false");
+    const install = await shell.exec("yarn install");
 
     if (install.code !== 0) {
       console.log("Yarn installation failed!");
