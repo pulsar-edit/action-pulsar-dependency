@@ -63,7 +63,7 @@ const fs = require("fs");
 
     // Now to build
     //const build = await shell.exec("yarn build");
-    const build = await shell.exec("npm build");
+    const build = await shell.exec("npm run build");
 
     if (build.code !== 0) {
       console.log("Yarn Build Failed!");
