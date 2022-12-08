@@ -5,6 +5,9 @@ const fs = require("fs");
 
 (async () => {
   try {
+    
+    const pack = core.getInput("package-to-test");
+
     if (pack === '' || pack == undefined) {
       core.setFailed("No Package has been specified to test!");
     }
