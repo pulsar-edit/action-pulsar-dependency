@@ -1,14 +1,27 @@
 name: 'Action Pulsar Dependency Tester'
 description: 'Test changes in Core Dependencies of Pulsar'
 author: confused-Techie
-inputs:
-  package-to-test:
-    description: 'The package we are testing'
-    require: true
-    default: ''
-runs:
-  using: 'node16'
-  main: 'index.js'
 branding:
   icon: check-square
   color: purple
+runs:
+  using: "composite"
+  steps:
+    - if: runner.os == 'Linux'
+      shell: bash
+      run: |
+        sudo apt install -y libnotify4
+        curl -L "https://download.pulsar-edit.dev/?os=linux&type=linux_deb" --output pulsar.deb
+        sudo dpkg -i pulsar.deb
+    - if: runner.os == 'macOS'
+      shell: bash
+      run: |
+        curl -L "https://download.pulsar-edit.dev/?os=intel_mac&type=mac_dmg" --output pulsar.dmg
+        hdiutil attach pulsar.dmg
+        sudo cp -rf /Volumes/Pulsar*/Pulsar.app /Applications
+        xattr -cr /Applications/Pulsar.app/
+        sudo ln -s /Applications/Pulsar.app/Contents/MacOS/Pulsar /usr/local/bin/pulsar
+    - if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        Invoke-WebRequest -URI "https://download.pulsar-edit.dev/?os=windows&type=windows_portable" -OutFile "C:\Users\runneradmin\AppData\Local\Microsoft\WindowsApps\pulsar.exe"
