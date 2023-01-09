@@ -24,4 +24,4 @@ runs:
     - if: runner.os == 'Windows'
       shell: pwsh
       run: |
-        Invoke-WebRequest -URI "https://download.pulsar-edit.dev/?os=windows&type=windows_portable" -OutFile "C:\Users\runneradmin\AppData\Local\Microsoft\WindowsApps\pulsar.exe"
+        Invoke-WebRequest -URI "https://download.pulsar-edit.dev/?os=windows&type=windows_portable" -OutFile "$env:LOCALAPPDATA\Microsoft\WindowsApps\pulsar.exe"
