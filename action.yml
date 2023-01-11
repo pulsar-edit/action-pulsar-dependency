@@ -24,4 +24,17 @@ runs:
     - if: runner.os == 'Windows'
       shell: pwsh
       run: |
-        Invoke-WebRequest -URI "https://download.pulsar-edit.dev/?os=windows&type=windows_portable" -OutFile "$env:LOCALAPPDATA\Microsoft\WindowsApps\pulsar.exe"
+        $wc = New-Object System.Net.WebClient
+        $url = "https://download.pulsar-edit.dev/?os=windows&type=windows_setup"
+        $downloadPath = "pulsarInstall.exe"
+
+        Write-Host "Downloading Pulsar to $downloadPath"
+        $wc.DownloadFile($url, $downloadPath)
+
+        Write-Host "Installing Pulsar - this may take awhile"
+        Start-Process -FilePath $downloadPath
+        Write-Host "Pulsar Install completed"
+
+        $Env:PATH += ";$env:LOCALAPPDATA\Programs\Pulsar"
+
+        # Invoke-WebRequest -URI "https://download.pulsar-edit.dev/?os=windows&type=windows_portable" -OutFile "$env:LOCALAPPDATA\Microsoft\WindowsApps\pulsar.exe"
