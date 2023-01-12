@@ -36,5 +36,6 @@ runs:
         Write-Host "Pulsar Install completed"
 
         $Env:PATH += ";$env:LOCALAPPDATA\Programs\Pulsar"
+        $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
 
         # Invoke-WebRequest -URI "https://download.pulsar-edit.dev/?os=windows&type=windows_portable" -OutFile "$env:LOCALAPPDATA\Microsoft\WindowsApps\pulsar.exe"
