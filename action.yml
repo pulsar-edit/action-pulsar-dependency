@@ -40,8 +40,8 @@ runs:
         $existingPathData = [System.Environment]::GetEnvironmentVariable("Path","Machine")
         $newPathData = @(
           $existingPathData,
-          "$env:LOCALAPPDATA\Programs\Pulsar",
-          "$env:LOCALAPPDATA\Programs\Pulsar\resources\app\ppm\bin"
+          "$env:LOCALAPPDATA\Programs\Pulsar\",
+          "$env:LOCALAPPDATA\Programs\Pulsar\resources\app\ppm\bin\"
         )
         
         [System.Environment]::SetEnvironmentVariable("Path", (($newPathData -join ';').replace(';;', ';')), [EnvironmentVariableTarget]::Machine )
