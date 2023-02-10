@@ -15,3 +15,8 @@ jobs:
       - name: Setup Pulsar Editor
         uses: ./
       - run: pulsar -v
+      - if: matrix.os == 'windows-latest'
+        run: |
+          [System.Environment]::GetEnvironmentVariable("Path","Machine")
+        
+        
