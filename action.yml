@@ -49,5 +49,5 @@ runs:
         $env:Path = (@(
           [System.Environment]::GetEnvironmentVariable("Path","Machine"),
           [System.Environment]::GetEnvironmentVariable("Path","User")
-       ) -join ';')
-       Write-Host "User PATH updated"
+        ) -join ';')
+        Write-Host "User PATH updated"
