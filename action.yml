@@ -37,16 +37,16 @@ runs:
 
         Write-Host "Adding Pulsar and PPM directories to User PATH"
 
-        $existingPathData = [System.Environment]::GetEnvironmentVariable("Path","Machine")
+        $existingPathData = [System.Environment]::GetEnvironmentVariable("Path","User")
         $newPathData = @(
           $existingPathData,
           "$env:LOCALAPPDATA\Programs\Pulsar\",
           "$env:LOCALAPPDATA\Programs\Pulsar\resources\app\ppm\bin\"
         )
         
-        [System.Environment]::SetEnvironmentVariable("Path", (($newPathData -join ';').replace(';;', ';')), [EnvironmentVariableTarget]::Machine )
+        [System.Environment]::SetEnvironmentVariable("Path", (($newPathData -join ';').replace(';;', ';')), [EnvironmentVariableTarget]::User )
         $env:Path = (@(
           [System.Environment]::GetEnvironmentVariable("Path","Machine"),
           [System.Environment]::GetEnvironmentVariable("Path","User")
         ) -join ';')
-        Write-Host "PATH updated: `r`nPreviously $($existingPathData)`r`nNow $([System.Environment]::GetEnvironmentVariable("Path","Machine"))"
+        Write-Host "PATH updated: `r`nPreviously `r`n$($existingPathData)`r`nNow `r`n$([System.Environment]::GetEnvironmentVariable("Path","User"))"
