@@ -32,7 +32,7 @@ runs:
         $wc.DownloadFile($url, $downloadPath)
 
         Write-Host "Installing Pulsar - this may take awhile"
-        Start-Process -FilePath $downloadPath
+        Start-Process -FilePath $downloadPath -ArgumentList '/currentuser', '/S' -Wait
         Write-Host "Pulsar Install completed"
 
         Write-Host "Adding Pulsar and PPM directories to User PATH"
