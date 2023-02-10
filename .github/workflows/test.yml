@@ -17,6 +17,10 @@ jobs:
       - if: runner.os == 'Windows'
         run: |
           [System.Environment]::GetEnvironmentVariable("Path","Machine")
+          Get-ChildItem -Path ([System.Environment]::GetEnvironmentVariable("ProgramFiles"))
+          Get-ChildItem -Path ([System.Environment]::GetEnvironmentVariable("ProgramFiles(x86)"))
+          Get-ChildItem -Path ([System.Environment]::GetEnvironmentVariable("LOCALAPPDATA"))
+          if (Test-Path "$($env:LOCALAPPDATA)\Programs") { Get-ChildItem -Path "$([System.Environment]::GetEnvironmentVariable("LOCALAPPDATA"))\Programs" }
       - run: pulsar -v
       
         
