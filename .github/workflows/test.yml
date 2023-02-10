@@ -20,7 +20,9 @@ jobs:
             [System.Environment]::GetEnvironmentVariable("Path","Machine"),
             [System.Environment]::GetEnvironmentVariable("Path","User")
           ) -join ';')
-      - run: pulsar -v
+          pulsar -v
+      - if: runner.os == 'Linux' || runner.os == 'macOS'
+        run: pulsar -v
       
         
         
