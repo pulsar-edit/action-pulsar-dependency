@@ -35,5 +35,19 @@ runs:
         Start-Process -FilePath $downloadPath
         Write-Host "Pulsar Install completed"
 
-        $Env:PATH += ";$env:LOCALAPPDATA\Programs\Pulsar"
-        $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+        Write-Host "Adding Pulsar and PPM directories to User PATH"
+        $registryPath = 'Registry::HKEY_CURRENT_USER\Environment'
+
+        $existingUserPath = (Get-ItemProperty -Path $registryPath -Name path).Path
+        $newUserPath = @(
+          $existingMachinePath,
+          "$env:LOCALAPPDATA\Programs\Pulsar",
+          "$env:LOCALAPPDATA\Programs\Pulsar\resources\app\ppm\bin"
+        )
+        
+        Set-ItemProperty -Path $registryPath -Name path -Value (($newUserPath -join ';').replace(';;', ';'))
+        $env:Path = (@(
+          [System.Environment]::GetEnvironmentVariable("Path","Machine"),
+          [System.Environment]::GetEnvironmentVariable("Path","User")
+       ) -join ';')
+       Write-Host "User PATH updated"
