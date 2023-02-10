@@ -21,6 +21,8 @@ jobs:
           Get-ChildItem -Path ([System.Environment]::GetEnvironmentVariable("ProgramFiles(x86)"))
           Get-ChildItem -Path ([System.Environment]::GetEnvironmentVariable("LOCALAPPDATA"))
           if (Test-Path "$($env:LOCALAPPDATA)\Programs") { Get-ChildItem -Path "$([System.Environment]::GetEnvironmentVariable("LOCALAPPDATA"))\Programs" }
+          if (Test-Path "$($env:LOCALAPPDATA)\Programs\Pulsar") { Get-ChildItem -Path "$([System.Environment]::GetEnvironmentVariable("LOCALAPPDATA"))\Programs\Pulsar" }
+          pulsar -v
       - run: pulsar -v
       
         
