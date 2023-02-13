@@ -4,6 +4,9 @@ author: confused-Techie
 branding:
   icon: check-square
   color: purple
+outputs:
+  windows-path:
+    
 runs:
   using: "composite"
   steps:
@@ -35,18 +38,7 @@ runs:
         Start-Process -FilePath $downloadPath -ArgumentList '/currentuser', '/S' -Wait
         Write-Host "Pulsar Install completed"
 
-        Write-Host "Adding Pulsar and PPM directories to User PATH"
+        Write-Host "Adding Pulsar and PPM directories to GITHUB_PATH"
 
-        $existingPathData = [System.Environment]::GetEnvironmentVariable("Path","User")
-        $newPathData = @(
-          $existingPathData,
-          "$env:LOCALAPPDATA\Programs\Pulsar\",
-          "$env:LOCALAPPDATA\Programs\Pulsar\resources\app\ppm\bin\"
-        )
-        
-        [System.Environment]::SetEnvironmentVariable("Path", (($newPathData -join ';').replace(';;', ';')), [EnvironmentVariableTarget]::User )
-        $env:Path = (@(
-          [System.Environment]::GetEnvironmentVariable("Path","Machine"),
-          [System.Environment]::GetEnvironmentVariable("Path","User")
-        ) -join ';')
-        Write-Host "PATH updated: `r`nPreviously `r`n$($existingPathData)`r`nNow `r`n$([System.Environment]::GetEnvironmentVariable("Path","User"))"
+        "$env:LOCALAPPDATA\Programs\Pulsar\" >> $env:GITHUB_PATH
+        "$env:LOCALAPPDATA\Programs\Pulsar\resources\app\ppm\bin\" >> $env:GITHUB_PATH
