@@ -4,9 +4,6 @@ author: confused-Techie
 branding:
   icon: check-square
   color: purple
-outputs:
-  windows-path:
-    
 runs:
   using: "composite"
   steps:
