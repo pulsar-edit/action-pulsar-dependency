@@ -15,6 +15,3 @@ jobs:
       - name: Setup Pulsar Editor
         uses: ./
       - run: pulsar -v
-      
-        
-        
