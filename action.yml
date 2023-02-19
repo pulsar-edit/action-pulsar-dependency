@@ -19,7 +19,6 @@ runs:
         curl -L "https://download.pulsar-edit.dev/?os=intel_mac&type=mac_dmg" --output pulsar.dmg
         hdiutil attach pulsar.dmg
         sudo cp -rf /Volumes/Pulsar*/Pulsar.app /Applications
-        xattr -cr /Applications/Pulsar.app/
         sudo ln -s /Applications/Pulsar.app/Contents/MacOS/Pulsar /usr/local/bin/pulsar
     - if: runner.os == 'Windows'
       shell: pwsh
