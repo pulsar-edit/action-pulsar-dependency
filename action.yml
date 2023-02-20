@@ -19,8 +19,9 @@ runs:
         curl -L "https://download.pulsar-edit.dev/?os=intel_mac&type=mac_dmg" --output pulsar.dmg
         hdiutil attach pulsar.dmg
         sudo cp -rf /Volumes/Pulsar*/Pulsar.app /Applications
-        xattr -cr /Applications/Pulsar.app/
-        sudo ln -s /Applications/Pulsar.app/Contents/MacOS/Pulsar /usr/local/bin/pulsar
+        sudo mkdir -p /usr/local/bin/
+        sudo ln -s /Applications/Pulsar.app/Contents/Resources/pulsar.sh /usr/local/bin/pulsar
+        #sudo ln -s /Applications/Pulsar.app/Contents/Resources/app/ppm/bin/apm /usr/local/bin/ppm
     - if: runner.os == 'Windows'
       shell: pwsh
       run: |
@@ -32,8 +33,10 @@ runs:
         $wc.DownloadFile($url, $downloadPath)
 
         Write-Host "Installing Pulsar - this may take awhile"
-        Start-Process -FilePath $downloadPath
+        Start-Process -FilePath $downloadPath -ArgumentList '/currentuser', '/S' -Wait
         Write-Host "Pulsar Install completed"
 
-        $Env:PATH += ";$env:LOCALAPPDATA\Programs\Pulsar"
-        $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+        Write-Host "Adding Pulsar and PPM directories to GITHUB_PATH"
+
+        "$env:LOCALAPPDATA\Programs\Pulsar\" >> $env:GITHUB_PATH
+        "$env:LOCALAPPDATA\Programs\Pulsar\resources\app\ppm\bin\" >> $env:GITHUB_PATH
