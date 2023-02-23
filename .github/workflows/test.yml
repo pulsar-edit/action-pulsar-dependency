@@ -14,4 +14,6 @@ jobs:
       - uses: actions/checkout@v3
       - name: Setup Pulsar Editor
         uses: ./
-      - run: pulsar -v
+      - run: |
+          pulsar --version
+          pulsar --package list
