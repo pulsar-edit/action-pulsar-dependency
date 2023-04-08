@@ -13,6 +13,8 @@ runs:
         sudo apt install -y libnotify4
         curl -L "https://download.pulsar-edit.dev/?os=linux&type=linux_deb" --output pulsar.deb
         sudo dpkg -i pulsar.deb
+
+        pulsar -v
     - if: runner.os == 'macOS'
       shell: bash
       run: |
@@ -22,6 +24,8 @@ runs:
         sudo mkdir -p /usr/local/bin/
         sudo ln -s /Applications/Pulsar.app/Contents/Resources/pulsar.sh /usr/local/bin/pulsar
         #sudo ln -s /Applications/Pulsar.app/Contents/Resources/app/ppm/bin/apm /usr/local/bin/ppm
+
+        pulsar -v
     - if: runner.os == 'Windows'
       shell: pwsh
       run: |
@@ -40,3 +44,5 @@ runs:
 
         "$env:LOCALAPPDATA\Programs\Pulsar\" >> $env:GITHUB_PATH
         "$env:LOCALAPPDATA\Programs\Pulsar\resources\app\ppm\bin\" >> $env:GITHUB_PATH
+
+        pulsar -v
