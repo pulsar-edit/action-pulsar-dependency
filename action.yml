@@ -45,6 +45,9 @@ runs:
         "$env:LOCALAPPDATA\Programs\Pulsar\" >> $env:GITHUB_PATH
         "$env:LOCALAPPDATA\Programs\Pulsar\resources\app\ppm\bin\" >> $env:GITHUB_PATH
 
+      # This additional step is needed, since the PATH available to PowerShell
+      # doesn't always update immediatly, which in this case `pulsar` is not available
+      # right after installation, so a new shell spawn is needed to invoke it.
     - if: runner.os == 'Windows'
       shell: pwsh
       run: |
