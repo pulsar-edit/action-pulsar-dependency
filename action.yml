@@ -14,7 +14,8 @@ runs:
         curl -L "https://download.pulsar-edit.dev/?os=linux&type=linux_deb" --output pulsar.deb
         sudo dpkg -i pulsar.deb
 
-        pulsar -v
+        pulsar --version
+        pulsar --package list
     - if: runner.os == 'macOS'
       shell: bash
       run: |
@@ -25,7 +26,8 @@ runs:
         sudo ln -s /Applications/Pulsar.app/Contents/Resources/pulsar.sh /usr/local/bin/pulsar
         #sudo ln -s /Applications/Pulsar.app/Contents/Resources/app/ppm/bin/apm /usr/local/bin/ppm
 
-        pulsar -v
+        pulsar --version
+        pulsar --package list
     - if: runner.os == 'Windows'
       shell: pwsh
       run: |
@@ -51,4 +53,5 @@ runs:
     - if: runner.os == 'Windows'
       shell: pwsh
       run: |
-        pulsar -v
+        pulsar --version
+        pulsar --package list
