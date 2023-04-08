@@ -45,4 +45,4 @@ runs:
         "$env:LOCALAPPDATA\Programs\Pulsar\" >> $env:GITHUB_PATH
         "$env:LOCALAPPDATA\Programs\Pulsar\resources\app\ppm\bin\" >> $env:GITHUB_PATH
 
-        pulsar -v
+          pulsar -v
