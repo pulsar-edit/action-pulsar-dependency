@@ -19,7 +19,7 @@ jobs:
       - name: Checkout the Latest Package Code
         uses: actions/checkout@v3
       - name: Setup Pulsar Editor
-        uses: pulsar-edit/action-pulsar-dependency@v3.2
+        uses: pulsar-edit/action-pulsar-dependency@v3.3
       - name: Run the headless Pulsar Tests
         uses: coactions/setup-xvfb@v1.0.1
         with:
