@@ -10,7 +10,7 @@ runs:
     - if: runner.os == 'Linux'
       shell: bash
       run: |
-        sudo apt install -y libnotify4 libsecret-1-0
+        sudo apt install -y libnotify4
         curl -L "https://download.pulsar-edit.dev/?os=linux&type=linux_deb" --output pulsar.deb
         sudo dpkg -i pulsar.deb
 
