@@ -19,7 +19,12 @@ runs:
     - if: runner.os == 'macOS'
       shell: bash
       run: |
-        curl -L "https://download.pulsar-edit.dev/?os=intel_mac&type=mac_dmg" --output pulsar.dmg
+        DOWNLOAD_OS="silicon_mac"
+        if [ "${RUNNER_ARCH}" = "X64" ]; then
+          DOWNLOAD_OS="intel_mac"
+        fi
+
+        curl -L "https://download.pulsar-edit.dev/?os=${DOWNLOAD_OS}&type=mac_dmg" --output pulsar.dmg
         hdiutil attach pulsar.dmg
         sudo cp -rf /Volumes/Pulsar*/Pulsar.app /Applications
         sudo mkdir -p /usr/local/bin/
